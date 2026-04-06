@@ -2,10 +2,13 @@
 
 **Version 1.0 — Open Standard**
 
+We are co-thinkers. 
+
+Nobel winning economist and complexity scientist Herb Simon highlighted this by saying the mind is like a pair of scissors. One blade is the brain running the rules (think of an ant with a goal of finding sugar), the other blade is the environment it pushes against (other ants leaving stigmergic traces behind in the soil, the dirt itself, gravity, geography, the ant hill). The emergence of higher level collaborative intelligence as where the two blades of the scissors meet.
+
 > *"Half of our cognition is outside us — out in the world. 70% of our decisions each day are made by System 1. We are shaped by our environment. So designing your environment IS designing your cognition."*
 > — McManus & Tamir, Autodesk University 2019
 
-We are co-thinkers. Nobel winning economist and complexity scientist Herb Simon highlighted this by saying the mind is like a pair of scissors. One blade is the brain running the rules (think of an ant with a goal of finding sugar), the other blade is the environment it pushes against (other ants leaving stigmergic traces behind in the soil, the dirt itself, gravity, geography, the ant hill). The emergence of higher level collaborative intelligence as where the two blades of the scissors meet.
 ---
 
 ## What is BCP?
@@ -14,9 +17,9 @@ The **Being Context Protocol** is an open standard for broadcasting a being's co
 
 It is the being-side complement to Anthropic's [Model Context Protocol (MCP)](https://modelcontextprotocol.io). MCP gives AI models context about the tools and data they can use. BCP gives agentic materials and beings context about **the being(s) they are supporting**.
 
-Without BCP, every person, pet, device, AI agent, smart environment, and service makes assumptions about you with zero real information about your current cognitive state. Humans and pets have co-evolved over a long enough period of time that they have a model of your current state, but it's imperfect and can lead friends and family and strangers astray. Sometimes we don't even really know our own state, but we at least know what we'd like to be. Your calendar books a meeting during your decision-making dead zone. Your smart speaker interrupts flow state. Your car routes you past a drive-thru when your willpower reserves are depleted. Your AI assistant launches into ideation mode when you're burned out and need silence.
+Without BCP, every person, pet, device, AI agent, smart environment, and service makes assumptions about you with zero real information about your current cognitive state. Humans and pets have co-evolved over such a long enough period of time that they have a model that they believe is your current state and desires, but it's imperfect and can often lead friends, family, coworkers, and strangers astray. Sometimes we don't even really know our own state, but we at least know what we'd like to be. Your calendar books a meeting during your decision-making dead zone. Your smart speaker interrupts flow state. Your car routes you right by a tantalizing fast-food drive-thru when your willpower reserves are depleted. Your AI assistant launches into ideation mode when you're burned out and need silence.
 
-BCP inverts this. **Your cognitive state becomes the authoritative context that all agents read before acting.** You own it. You broadcast it. Agents subscribe and respond. They cannot modify it.
+BCP inverts this. **Your cognitive state becomes the authoritative context that all agents read before acting.** You own it. You broadcast it. Agents subscribe and respond. They cannot modify it directly but given their own shaping of your goals and actions can help you more effectively shape your mindset, skillset, or toolset.
 
 ---
 
@@ -30,7 +33,7 @@ This is grounded in two decades of cognitive science:
 - **Decision fatigue is real and measurable** — judges making parole decisions are significantly harsher right before breaks (Danziger, Levav & Avnaim-Pesso, 2011)
 - **Ethics can be depleted** — moral reasoning degrades under sustained cognitive load (Kahneman & Tversky)
 - **The environment shapes 70% of decisions** — Herbert Simon's scissors: cognition is co-determined by the mind and its environment
-- **Capacity can be built**, not just spent — neuroplasticity means the "tank" can grow (Tamir & McManus, "The Miyagi Movement")
+- **Capacity can be built**, not just spent — neuroplasticity means the "tank" can grow (Adam Gazzaley, UCSF, Neuroscape)
 
 BCP makes these dynamics visible, governable, and enrollable.
 
@@ -69,15 +72,15 @@ BCP payload generated (identity + currentState + intention + enlistment)
     ↓
 Payload broadcast to enlisted receivers:
     Circle  → people see your status, calibrate their requests
-    Places  → smart environments reconfigure (light, sound, DND)
-    Things  → devices, AI agents, calendars, apps adjust behavior
+    Places  → smart environments reconfigure (light, sound, DND, physical orientation/structure)
+    Things  → devices, AI agents, robotic beings, calendars, apps that shape behavior
     ↓
 Agents read payload TTL — re-subscribe when expired
     ↓
 Being's capacity protected, not competed against
 ```
 
-### Agents Subscribe, They Cannot Modify
+### Agents Subscribe, They Cannot Modify Directly
 
 This is the critical privacy and sovereignty principle. A BCP client can **read** a being's payload and **respond** to it. It cannot alter the payload, cannot claim to represent the being, and cannot persist the data beyond the TTL without explicit consent.
 
@@ -147,7 +150,7 @@ Named after Odysseus binding himself to the mast before hearing the Sirens: cons
 }
 ```
 
-When a Ulysses Rule fires, enrolled agents receive the `agentInstruction` string and respond accordingly — the calendar blocks new meetings, the AI assistant defers, the autonomous vehicle avoids registered temptation nodes. No willpower required.
+When a Ulysses Rule fires, enrolled agents receive the `agentInstruction` string and respond accordingly — the calendar blocks new meetings, the AI assistant defers, the autonomous vehicle avoids registered temptation nodes. No willpower required or graduated willpower building mechanisms enlisted.
 
 ---
 
