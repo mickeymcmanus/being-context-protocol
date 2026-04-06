@@ -1,0 +1,408 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://beingcontextprotocol.org/schema/bcp-1.0.json",
+  "title": "Being Context Protocol Payload",
+  "description": "BCP/1.0 — An open standard for broadcasting a being's cognitive state to agentic environments, devices, and services. The human-side complement to MCP.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["version", "identity", "currentState", "intention", "enlistment"],
+  "properties": {
+
+    "version": {
+      "type": "string",
+      "const": "BCP/1.0",
+      "description": "Protocol version identifier"
+    },
+
+    "identity": {
+      "type": "object",
+      "description": "Stable characteristics of this being's cognitive profile. Updated infrequently. The 'who you are' layer.",
+      "required": ["ownerHash"],
+      "properties": {
+        "ownerHash": {
+          "type": "string",
+          "description": "Anonymized stable ID — no PII. SHA-256 of a private device key."
+        },
+        "cognitiveArchetype": {
+          "type": "string",
+          "enum": ["Deep Diver", "Connector", "Explorer", "Executor", "Reflector", "Collaborator"],
+          "description": "Learned over time. How this being characteristically uses cognitive resources."
+        },
+        "beingDescriptor": {
+          "type": "object",
+          "description": "Morphological coordinates for non-human beings. Implements Levin/Bongard taxonomy.",
+          "properties": {
+            "substrate": {
+              "type": "object",
+              "description": "Material composition. Values sum to 1.0.",
+              "properties": {
+                "organicFraction":    { "type": "number", "minimum": 0, "maximum": 1 },
+                "cyberneticFraction": { "type": "number", "minimum": 0, "maximum": 1 },
+                "inorganicFraction":  { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            "designOrigin": {
+              "type": "object",
+              "description": "How this being came to exist. Values sum to 1.0.",
+              "properties": {
+                "evolvedFraction":  { "type": "number", "minimum": 0, "maximum": 1 },
+                "designedFraction": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            "autonomyLevel": {
+              "type": "number",
+              "minimum": 0, "maximum": 1,
+              "description": "0 = clockwork/rule-based, 1 = high-level autonomous cognition"
+            },
+            "organizationLevel": {
+              "type": "string",
+              "enum": ["cellular", "individual", "swarm", "hive", "emergent"],
+              "description": "Unit of agency. Hive/swarm beings may have emergentState fields."
+            },
+            "levinCategory": {
+              "type": "integer",
+              "minimum": 1, "maximum": 23,
+              "description": "Optional. Position in Levin's 23-category morphological space."
+            }
+          }
+        },
+        "activityCalibrations": {
+          "type": "object",
+          "description": "Personal response profiles for specific activities. Key is activity type string. Neta finds reading depleting; Mickey finds it regenerative — same activity, opposite effects.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "activityType":      { "type": "string" },
+              "personalLoadImpact": {
+                "type": "number", "minimum": -100, "maximum": 100,
+                "description": "Negative = regenerative for this being. Not a population average."
+              },
+              "sampleCount":       { "type": "integer" },
+              "confidence":        { "type": "number", "minimum": 0, "maximum": 1 },
+              "optimalTimeOfDay":  { "type": "array", "items": { "type": "string" } },
+              "optimalJuiceMin":   { "type": "number" },
+              "optimalJuiceMax":   { "type": "number" }
+            }
+          }
+        },
+        "ulyssesConstraints": {
+          "type": "array",
+          "description": "Pre-committed rules written when rational, enforced when depleted.",
+          "items": { "$ref": "#/definitions/UlyssesConstraint" }
+        },
+        "cognitiveMap": {
+          "type": "object",
+          "description": "Known cognitive terrain for this being.",
+          "properties": {
+            "regenerativeNodes": {
+              "type": "array", "items": { "type": "string" },
+              "description": "Activities/places that restore capacity. e.g. 'forest walk', 'sketching'"
+            },
+            "depletiveNodes": {
+              "type": "array", "items": { "type": "string" },
+              "description": "Activities/places that drain capacity. e.g. 'open-plan office', 'news apps'"
+            },
+            "flowTriggers": {
+              "type": "array", "items": { "type": "string" },
+              "description": "Conditions that reliably induce flow state."
+            },
+            "avoidanceNodes": {
+              "type": "array", "items": { "type": "string" },
+              "description": "Ulysses nodes — places to route around when depleted. e.g. 'McDonald\\'s drive-thru'"
+            }
+          }
+        },
+        "creativityProductivityDefault": {
+          "type": "number", "minimum": -1, "maximum": 1,
+          "description": "Procrastinator/pre-crastinator position. -1 = executes immediately (no incubation). 0 = sweet spot. +1 = incubates richly (may not execute). See Tamir & McManus 2019."
+        }
+      }
+    },
+
+    "currentState": {
+      "type": "object",
+      "description": "Live snapshot. TTL-limited. The 'where you are right now' layer.",
+      "required": ["timestamp", "ttlSeconds", "reserves"],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC timestamp of when this state was captured."
+        },
+        "ttlSeconds": {
+          "type": "integer",
+          "description": "Payload expires after this many seconds. Agents must re-subscribe."
+        },
+        "reserves": {
+          "type": "object",
+          "description": "Cognitive reserve levels. Human taxonomy from Tamir/McManus Cognition Facts Label (2019). Other beings use domain-appropriate extended fields.",
+          "required": ["operationalCapacity"],
+          "properties": {
+            "operationalCapacity": {
+              "type": "number", "minimum": 0, "maximum": 100,
+              "description": "Overall functional capacity right now. Universal across being types."
+            },
+            "extended": {
+              "type": "object",
+              "description": "Being-type-specific reserves. Human beings use the Cognition Facts taxonomy. Robots use power/sensor fields. Community-registered vocabularies.",
+              "additionalProperties": { "type": "number", "minimum": 0, "maximum": 100 },
+              "examples": [
+                {
+                  "human": {
+                    "totalAttention": 68,
+                    "comprehension": 72,
+                    "rationality": 65,
+                    "analytics": 70,
+                    "decisionMaking": 55,
+                    "ethics": 82,
+                    "belief": 88,
+                    "reflection": 78,
+                    "intuition": 74,
+                    "memory": 66
+                  },
+                  "autonomous-vehicle": {
+                    "batteryCharge": 78,
+                    "sensorConfidence": 92,
+                    "routePlanningLoad": 45,
+                    "communicationReliability": 98
+                  },
+                  "dolphin-future": {
+                    "socialBondingState": 88,
+                    "huntingReadiness": 60,
+                    "sonarCapacity": 95,
+                    "podCoherence": 82
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "physiological": {
+          "type": "object",
+          "description": "Raw sensor signals. On-device computation only — no biometric data transmitted. Values are derived metrics, never raw frames or facial geometry.",
+          "additionalProperties": true,
+          "properties": {
+            "hrvCurrent":          { "type": "number", "description": "HRV RMSSD in milliseconds" },
+            "hrvBaseline":         { "type": "number", "description": "Personal 7-day baseline HRV" },
+            "heartRate":           { "type": "number", "description": "BPM" },
+            "movementStillness":   { "type": "number", "minimum": 0, "maximum": 1 },
+            "headMotionComplexity":{ "type": "number", "minimum": 0, "maximum": 1, "description": "AirPods IMU entropy — attentional wandering signal" },
+            "pupilDiameterRatio":  { "type": "number", "minimum": 0, "maximum": 1, "description": "Normalized against personal baseline. Working memory load proxy." },
+            "blinkRate":           { "type": "number", "description": "Blinks per minute. Decreases with focus; increases with fatigue." },
+            "fixationDuration":    { "type": "number", "description": "Mean fixation duration in ms. Longer = deeper comprehension." },
+            "saccadeVelocity":     { "type": "number", "description": "Saccade velocity in deg/sec. Decision-making speed proxy." }
+          }
+        },
+        "dailyArc": {
+          "type": "object",
+          "description": "Position in the cognitive activity arc of the day.",
+          "properties": {
+            "reserveAtDayStart":          { "type": "number" },
+            "reserveConsumedSoFar":       { "type": "number" },
+            "estimatedReserveAtDayEnd":   { "type": "number" },
+            "hoursUntilCritical":         { "type": "number" },
+            "currentDayPhase": {
+              "type": "string",
+              "enum": ["Morning Ramp", "Peak Window", "Pre-Break Dip", "Midday", "Pre-Lunch Dip", "Afternoon", "Late Afternoon", "Evening Regen", "Sleep"]
+            }
+          }
+        }
+      }
+    },
+
+    "intention": {
+      "type": "object",
+      "description": "What this being is navigating TOWARD. The compass direction. Not just current state — the trajectory being built.",
+      "required": ["mode", "durationMinutes", "expiresAt"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "Explore", "Ship",
+            "Curiosity", "Creativity", "Growth", "Flow", "Reflection", "Collaboration", "Inspiration", "Productivity",
+            "Exploration", "Incubation", "Interdisciplinary", "Deconstruct",
+            "Skill Hone", "Self Improvement", "Resilience",
+            "Diverge", "Converge", "Reconnect",
+            "Active Recovery", "Deep Recovery", "Biophilic Recovery"
+          ],
+          "description": "The current intention mode. Level 1: Explore/Ship. Level 2: 8-sector wheel. Level 3: sub-modes."
+        },
+        "subMode": {
+          "type": "string",
+          "description": "Optional sub-mode providing finer-grained intention within the mode."
+        },
+        "creativityProductivityBalance": {
+          "type": "number", "minimum": -1, "maximum": 1,
+          "description": "Current position on the procrastinator/pre-crastinator spectrum. The Which Watch crown dial navigates this. Sweet spot is near 0."
+        },
+        "durationMinutes": { "type": "integer" },
+        "startedAt":       { "type": "string", "format": "date-time" },
+        "expiresAt":       { "type": "string", "format": "date-time" },
+        "mindsetTarget": {
+          "type": "string",
+          "description": "The cognitive capacity being trained over the longer arc. 'Building Exploration', 'Reducing Pre-Crastination', etc.",
+          "enum": [
+            "Building Curiosity", "Building Flow", "Building Resilience", "Building Exploration",
+            "Reducing Procrastination", "Reducing Pre-Crastination",
+            "Building Collaboration", "Building Reflection", "Building Interdisciplinary Thinking"
+          ]
+        },
+        "protectedReserves": {
+          "type": "array", "items": { "type": "string" },
+          "description": "Reserves to avoid spending during this intention window."
+        },
+        "buildingReserves": {
+          "type": "array", "items": { "type": "string" },
+          "description": "Reserves this intention is designed to grow."
+        }
+      }
+    },
+
+    "enlistment": {
+      "type": "object",
+      "description": "Who and what has been recruited to serve this intention.",
+      "properties": {
+        "circle": {
+          "type": "object",
+          "description": "People in this being's life. Not 'team' — anyone who cares: family, friends, collaborators, caregivers, mentors.",
+          "properties": {
+            "active":          { "type": "boolean" },
+            "memberIDs":       { "type": "array", "items": { "type": "string" } },
+            "statusMessage":   { "type": "string", "description": "What circle members see" },
+            "visibilityLevel": { "type": "string", "enum": ["statusOnly", "withDuration", "full"] }
+          }
+        },
+        "places": {
+          "type": "object",
+          "description": "Smart environments enlisted to serve this intention.",
+          "properties": {
+            "active":     { "type": "boolean" },
+            "placeIDs":   { "type": "array", "items": { "type": "string" } },
+            "capabilities": { "$ref": "#/definitions/PlaceCapabilityRequest" }
+          }
+        },
+        "things": {
+          "type": "object",
+          "description": "Devices, AI agents, calendars, and apps enlisted.",
+          "properties": {
+            "active":               { "type": "boolean" },
+            "notificationPolicy":   { "type": "string", "enum": ["blockAll", "circleOnly", "urgentOnly", "open"] },
+            "calendarPolicy":       { "type": "string", "enum": ["hardBlock", "softBlock", "open"] },
+            "aiAssistantMode":      { "type": "string", "enum": ["silent", "minimal", "ideation", "collaborative", "normal"] },
+            "ulyssesApps":          { "type": "array", "items": { "type": "string" }, "description": "Apps blocked by Ulysses rule when triggered" }
+          }
+        }
+      }
+    },
+
+    "historySignal": {
+      "type": "object",
+      "description": "Optional. Anonymized aggregate. Only included if being opts into public scope. Powers cognitive epidemiology research.",
+      "properties": {
+        "weeklyCapacityTrend": { "type": "string", "enum": ["building", "stable", "eroding"] },
+        "topDepletiveActivities":    { "type": "array", "items": { "type": "string" } },
+        "topRegenerativeActivities": { "type": "array", "items": { "type": "string" } },
+        "learningVelocity":          { "type": "number", "description": "Skill acquisition rate" },
+        "flowStateFrequency":        { "type": "number", "description": "Flow states per week" },
+        "averageJuiceAtDayEnd":      { "type": "number" }
+      }
+    }
+  },
+
+  "definitions": {
+
+    "UlyssesConstraint": {
+      "type": "object",
+      "description": "Pre-committed rule. Written when rational. Enforced automatically when depleted. Named for Odysseus binding himself to the mast.",
+      "required": ["id", "name", "trigger", "action"],
+      "properties": {
+        "id":          { "type": "string" },
+        "name":        { "type": "string" },
+        "description": { "type": "string" },
+        "trigger": {
+          "type": "object",
+          "description": "Conditions that activate this constraint.",
+          "properties": {
+            "overallJuiceBelow":    { "type": "number" },
+            "decisionMakingBelow": { "type": "number" },
+            "ethicsBelow":         { "type": "number" },
+            "loadAbove":           { "type": "number" },
+            "timeOfDay":           { "type": "array", "items": { "type": "string" } },
+            "locationGeofence":    { "type": "string" },
+            "activityTypes":       { "type": "array", "items": { "type": "string" } },
+            "sustainedMinutes":    { "type": "integer" }
+          }
+        },
+        "action": {
+          "type": "object",
+          "required": ["type", "agentInstruction"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["routeAvoidance", "appBlock", "enforceIntention", "notifyCircle", "requireConfirm", "startRecovery", "endDecisions"]
+            },
+            "parameters":          { "type": "object" },
+            "requireConfirmation": { "type": "boolean" },
+            "confirmationPrompt":  { "type": "string" },
+            "agentInstruction": {
+              "type": "string",
+              "description": "Plain-language instruction broadcast to enrolled agents when this rule fires."
+            }
+          }
+        }
+      }
+    },
+
+    "PlaceCapabilityRequest": {
+      "type": "object",
+      "description": "What this being is requesting from enrolled places. Places respond only to capabilities they have.",
+      "properties": {
+        "sensory": {
+          "type": "object",
+          "description": "Tier 1: Basic smart environment (Hue, Nest, smart speaker).",
+          "properties": {
+            "lightTemperature": { "type": "integer", "description": "Kelvin. 2700=warm/dim, 6500=bright/cool" },
+            "lightBrightness":  { "type": "integer", "minimum": 0, "maximum": 100 },
+            "soundEnvironment": { "type": "string", "enum": ["silence", "brown-noise", "nature", "ambient", "open"] },
+            "temperature":      { "type": "number", "description": "Celsius" },
+            "doNotDisturb":     { "type": "boolean" }
+          }
+        },
+        "spatial": {
+          "type": "object",
+          "description": "Tier 2: Advanced smart environment (motorized, smart glass, HVAC).",
+          "properties": {
+            "ceilingHeight": {
+              "type": "string",
+              "enum": ["high", "standard", "low"],
+              "description": "Cathedral effect: high=abstract/creative, low=detail/analytical (Meyers-Levy & Zhu, 2007)"
+            },
+            "openness":              { "type": "number", "minimum": 0, "maximum": 1 },
+            "naturalLightExposure":  { "type": "number", "minimum": 0, "maximum": 1 },
+            "viewOrientation":       { "type": "string", "enum": ["nature", "street", "private"] },
+            "seatingConfiguration":  { "type": "string", "enum": ["mobile", "anchored", "standing"] }
+          }
+        },
+        "agentic": {
+          "type": "object",
+          "description": "Tier 3: Robotic/fully agentic environment. High-level intent — the place agent decides how to execute.",
+          "properties": {
+            "cognitiveProtocol": { "type": "string", "enum": ["deep-work", "recovery", "creative", "social", "custom"] },
+            "avoidanceNodes":    { "type": "array", "items": { "type": "string" } },
+            "prioritySignal":    { "type": "string" }
+          }
+        },
+        "routing": {
+          "type": "object",
+          "description": "Vehicle/autonomous routing. Ulysses routing avoids pre-registered temptation nodes when triggered.",
+          "properties": {
+            "routingIntent":          { "type": "string", "enum": ["efficient", "scenic", "ulysses"] },
+            "avoidanceNodes":         { "type": "array", "items": { "type": "string" } },
+            "preferredEnvironments":  { "type": "array", "items": { "type": "string" } },
+            "juiceTrigger":           { "type": "number", "description": "Only apply Ulysses routing below this juice level" }
+          }
+        }
+      }
+    }
+  }
+}
