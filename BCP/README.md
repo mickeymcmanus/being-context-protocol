@@ -5,15 +5,16 @@
 > *"Half of our cognition is outside us — out in the world. 70% of our decisions each day are made by System 1. We are shaped by our environment. So designing your environment IS designing your cognition."*
 > — McManus & Tamir, Autodesk University 2019
 
+We are co-thinkers. Nobel winning economist and complexity scientist Herb Simon highlighted this by saying the mind is like a pair of scissors. One blade is the brain running the rules (think of an ant with a goal of finding sugar), the other blade is the environment it pushes against (other ants leaving stigmergic traces behind in the soil, the dirt itself, gravity, geography, the ant hill). The emergence of higher level collaborative intelligence as where the two blades of the scissors meet.
 ---
 
 ## What is BCP?
 
-The **Being Context Protocol** is an open standard for broadcasting a being's cognitive state to the agentic environments, devices, and services that surround them.
+The **Being Context Protocol** is an open standard for broadcasting a being's cognitive state to the people, agentic environments, devices, and services that surround them.
 
-It is the human-side complement to Anthropic's [Model Context Protocol (MCP)](https://modelcontextprotocol.io). MCP gives AI models context about the tools and data they can use. BCP gives agentic environments context about **the being they are serving**.
+It is the being-side complement to Anthropic's [Model Context Protocol (MCP)](https://modelcontextprotocol.io). MCP gives AI models context about the tools and data they can use. BCP gives agentic materials and beings context about **the being(s) they are supporting**.
 
-Without BCP, every device, AI agent, smart environment, and service makes assumptions about you with zero real information about your current cognitive state. Your calendar books a meeting during your decision-making dead zone. Your smart speaker interrupts flow state. Your car routes you past a drive-thru when your willpower reserves are depleted. Your AI assistant launches into ideation mode when you're burned out and need silence.
+Without BCP, every person, pet, device, AI agent, smart environment, and service makes assumptions about you with zero real information about your current cognitive state. Humans and pets have co-evolved over a long enough period of time that they have a model of your current state, but it's imperfect and can lead friends and family and strangers astray. Sometimes we don't even really know our own state, but we at least know what we'd like to be. Your calendar books a meeting during your decision-making dead zone. Your smart speaker interrupts flow state. Your car routes you past a drive-thru when your willpower reserves are depleted. Your AI assistant launches into ideation mode when you're burned out and need silence.
 
 BCP inverts this. **Your cognitive state becomes the authoritative context that all agents read before acting.** You own it. You broadcast it. Agents subscribe and respond. They cannot modify it.
 
